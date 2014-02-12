@@ -28,7 +28,7 @@ else
 fi
 
 
-mysql -u ${DB_USER} -p${DB_PASS} ${DB_HOST} -e 'status' | grep Uptime
+mysql -u ${DB_USER} -p${DB_PASS} -h ${DB_HOST} -e 'status' | grep Uptime
 status=$?
 
 if [ $status -ne 0 ]; then
