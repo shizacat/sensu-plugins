@@ -3,7 +3,7 @@
 #
 #
 #
-#
+# Требования: echo 'sensu ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/sensu && chmod 777 /etc/sudoers.d/sensu
 
 #COUNT_MD=`ls -l /dev/md* | grep -E '^-' | awk '{print $9}' wc -l`
 
@@ -19,13 +19,13 @@ STATE_UNKNOWN=3
 #ls -l /dev/md* | grep -E '^b' | awk '{print $10}' | \
 while read line; do
 
-	RAID_DEVICES=`mdadm -D ${line} | grep 'Raid Devices' | awk -F":" '{print $2 }'`
-	TOTAL_DEVICES=`mdadm -D ${line} | grep 'Total Devices' | awk -F":" '{print $2 }'`
-	ACTIVE_DEVICES=`mdadm -D ${line} | grep 'Active Devices' | awk -F":" '{print $2 }'`
-	WORKING_DEVICES=`mdadm -D ${line} | grep 'Working Devices' | awk -F":" '{print $2 }'`
-	FAILED_DEVICES=`mdadm -D ${line} | grep 'Failed Devices' | awk -F":" '{print $2 }'`
-	SPARE_DEVICES=`mdadm -D ${line} | grep 'Spare Devices' | awk -F":" '{print $2 }'`
-	STATE_RAID=`mdadm -D ${line} | grep 'State :' | awk -F":" '{print $2 }'`
+	RAID_DEVICES=`sudo mdadm -D ${line} | grep 'Raid Devices' | awk -F":" '{print $2 }'`
+	TOTAL_DEVICES=`sudo mdadm -D ${line} | grep 'Total Devices' | awk -F":" '{print $2 }'`
+	ACTIVE_DEVICES=`sudo mdadm -D ${line} | grep 'Active Devices' | awk -F":" '{print $2 }'`
+	WORKING_DEVICES=`sudo mdadm -D ${line} | grep 'Working Devices' | awk -F":" '{print $2 }'`
+	FAILED_DEVICES=`sudo mdadm -D ${line} | grep 'Failed Devices' | awk -F":" '{print $2 }'`
+	SPARE_DEVICES=`sudo mdadm -D ${line} | grep 'Spare Devices' | awk -F":" '{print $2 }'`
+	STATE_RAID=`sudo mdadm -D ${line} | grep 'State :' | awk -F":" '{print $2 }'`
 
 	# Checkeds
 	if [ $FAILED_DEVICES -ne 0 ]; then
