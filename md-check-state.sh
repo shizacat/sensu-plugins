@@ -27,17 +27,23 @@ while read line; do
 	SPARE_DEVICES=`sudo mdadm -D ${line} | grep 'Spare Devices' | awk -F":" '{print $2 }'`
 	STATE_RAID=`sudo mdadm -D ${line} | grep 'State :' | awk -F":" '{print $2 }'`
 
+	REBUILD_STATUS=`mdadm -D ${line} | grep ' Rebuild Status' | awk -F":" '{print $2 }'`
+
 	# Checkeds
 	if [ $FAILED_DEVICES -ne 0 ]; then
-		STATE=STATE_ERROR
+		STATE=${STATE_ERROR}
 		STATE_LINE=$STATE_LINE' ERROR '
+	elif [[ $REBUILD_STATUS != '' ]]; then
+		STATE=${STATE_WARNING}
+		STATE_LINE=$STATE_LINE' WARN '
 	else
 		STATE_LINE=$STATE_LINE' OK '
 	fi
-	STATE_LINE=$STATE_LINE" Raid Devices=${RAID_DEVICES}, Total Devices=${TOTAL_DEVICES}, \
+	STATE_LINE=$STATE_LINE" ${line}: Raid Devices=${RAID_DEVICES}, Total Devices=${TOTAL_DEVICES}, \
 Active Devices=${ACTIVE_DEVICES}, Working Devices=${WORKING_DEVICES}, \
 Failed Devices=${FAILED_DEVICES}, Spare Devices=${SPARE_DEVICES}, State=${STATE_RAID} "
-done < <( ls -l /dev/md* | grep -E '^b' | awk '{print $10}' )
+done < <( ls -l --time-style iso /dev/md* | grep -E '^b' | awk '{print $9}' )
+#done < <( ls -l /dev/md* | grep -E '^b' | awk '{print $10}' )
 
 echo $STATE_LINE
 exit $STATE
