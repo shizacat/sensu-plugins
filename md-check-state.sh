@@ -3,7 +3,7 @@
 #
 #
 #
-# Требования: echo 'sensu ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/sensu && chmod 777 /etc/sudoers.d/sensu
+# Требования: echo 'sensu ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/sensu && chmod 0440 /etc/sudoers.d/sensu
 
 #COUNT_MD=`ls -l /dev/md* | grep -E '^-' | awk '{print $9}' wc -l`
 
